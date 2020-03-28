@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1583837924 source:d:\code blocks\codeblocks\metody_lab\lab2\main.cpp
+	<iostream>
+	<iomanip>
+	<fstream>
+	<math.h>
+	<cfloat>
+

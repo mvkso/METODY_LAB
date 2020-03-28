@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1583835982 source:d:\code blocks\codeblocks\metody_lab\lab1\main.cpp
+	<iostream>
+	<conio.h>
+	<cfloat>
+
