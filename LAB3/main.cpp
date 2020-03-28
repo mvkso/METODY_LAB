@@ -150,7 +150,7 @@ int main()
 	Newton(f1, fp1, -0.3, n_max, e, e);
 	cout<<endl<<"Funkcja: tg(2x)-x-1"<<endl;
 	Newton(f2, fp2, 0.6, n_max, e, e);
-	cout << endl << endl << "Metoda Siecznych"<<endl << endl;
+	cout << endl << endl << "Metoda Siecznych"<<endl  << endl;
 	cout<<"Funkcja: sin(x/4)^2-x"<<endl;
 	Sieczne(f1, -0.5, 0.6, n_max, e, e);
 	cout<<endl<<"Funkcja: tg(2x)-x-1"<<endl;
