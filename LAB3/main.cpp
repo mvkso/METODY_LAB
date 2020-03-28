@@ -60,7 +60,6 @@ double Picard(function f, function f_iter, function fp, double x, int n_max, dou
 			break;
 	}
 	return new_approx;
-	.
 }
 
 
