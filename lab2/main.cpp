@@ -1,87 +1,120 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <cmath>
-#include <limits>
-
+#include <math.h>
+#include <cfloat>
 using namespace std;
 
+double f1(double x)
+{
+    if(x==0)
+        return -1;
+    double zmienna=(1 - exp(-x))/x;
+    return zmienna;
+}
 double taylorSeries(double x)
 {
-    double value = 1;
-    double result = 1;
+    double wynik = 1.0, wyraz = 1.0;
 
-    for (int i = 1; i < 30; i++)
+	for (int i = 1 ; i < 30 ; i++)
     {
-        value *= -(x / ((double)i + 1.0));
-        result += value;
-    }
-    return result;
-}
-
-double function(double x)
-{
-    return (1.0 - exp(-x)) / x;
+		wyraz *= -(x / ((double)i + 1.0));
+		wynik += wyraz;
+	}
+	return wynik;
 }
 
 int main()
 {
-    double x, result, absoluteError, log, exactValue, relativeError;
-
-    ifstream f_in;
-    f_in.open("dane.txt");
-    if (!f_in.good())
-        return 1;
-
-    ofstream f_out;
-    f_out.open("wynik.txt", ios::out);
-    if (!f_out.good())
-        return 1;
-
+    fstream PLIK;
+    fstream WYNIK;
     fstream wykres;
-    wykres.open("rysuj.dat", ios::out);
-    if (!wykres.good())
-        return 1;
+    fstream wykres_taylor;
+    string odstep="\t\t";
+    const int szerokosc = 30;
+    double zmienna,x,dokladny, wynik, bezwgledna, funkcja, lg, wzgledna,taylor,bezwgledna_sz, wzgledna_sz;
 
-    cout   << scientific << setprecision(20);
-    f_in   >> scientific >> setprecision(20);
-    f_out  << scientific << setprecision(20);
 
-    cout << setw(27) << "x ";
-    cout << setw(27) << "Wartosc dokladna ";
-    cout << setw(27) << "Wynik ";
-    cout << setw(27) << "Roznica";
-    cout << setw(27) << "Blad wzgledny ";
-    cout << endl;
+    PLIK.open("dane.txt", ios::in);
+	WYNIK.open("wynik.txt", ios::out);
+	wykres.open("rysuj.dat", ios::out);
+	wykres_taylor.open("taylor.dat", ios::out);
 
-    while (!f_in.eof())
+
+
+	if (!PLIK.good() || !WYNIK.good() || !wykres.good() || !wykres_taylor.good())
     {
-        f_in >> log >> x >> exactValue;
-
-        result        = function(x);
-        absoluteError = fabs(exactValue - result);
-
-
-        if (absoluteError > numeric_limits<double>::epsilon())
-        {
-            result        = taylorSeries(x);
-            absoluteError = fabs(exactValue - result);
-        }
-
-        relativeError = fabs(absoluteError / exactValue);
-
-        f_out << log << " " << log10(relativeError) << endl;
-
-        cout << setw(27) << x<< "  ";
-        cout << setw(27) << exactValue<< "  ";
-        cout << setw(27) << result<< "  ";
-        cout << setw(27) << absoluteError<< "  ";
-        cout << setw(27) << relativeError<< "  ";
-        cout << endl;
+        cout<<"Blad otwarcia pliku"<<endl;
+        return -1;
     }
 
-    f_in.close();
-    f_out.close();
+    //Formatowanie tekstu
+    WYNIK << setprecision(21);
+    wykres << setprecision(21);
+    wykres_taylor << setprecision(21);
+	cout << setprecision(21);
+	cout.setf(ios::scientific);
+	WYNIK.setf(ios::scientific);
+
+	WYNIK << odstep <<"log10" << odstep << odstep << "x" << odstep <<odstep  << "exact value" << odstep << "f1(x)" << odstep << odstep << "absolute error" << odstep  << "relative error" <<odstep << "szereg" << odstep<<odstep<< "roznica_szereg" << odstep << "blad wzgledny" << endl;
+
+    while(!PLIK.eof())
+    {
+        PLIK >> lg;
+		WYNIK << setw(szerokosc) << lg;
+        PLIK >> x;
+		WYNIK << setw(szerokosc) << x;
+        PLIK >> dokladny;
+		WYNIK << setw(szerokosc) << dokladny;
+
+		funkcja=f1(x);
+		WYNIK << setw(szerokosc) << f1;
+
+
+		bezwgledna=fabs(funkcja-dokladny);
+		WYNIK << setw(szerokosc) << bezwgledna;
+
+
+        if(dokladny!=0)
+        {
+            wzgledna=fabs(bezwgledna/dokladny);
+            WYNIK << setw(szerokosc) << wzgledna;
+
+
+        }
+
+
+        wykres << lg << " ";
+        wykres << log10(wzgledna) <<" ";
+
+
+        if(fabs(bezwgledna) >  DBL_EPSILON)
+        {
+            taylor=taylorSeries(x);
+            WYNIK << setw(szerokosc) << taylor;
+            bezwgledna_sz=fabs(taylor-dokladny);
+            WYNIK << setw(szerokosc) << bezwgledna_sz;
+
+
+            if(dokladny!=0)
+            {
+                wzgledna=fabs(bezwgledna_sz/dokladny);
+                WYNIK << setw(szerokosc) << wzgledna_sz;
+
+            }
+        }
+        wykres_taylor << lg << " ";
+        wykres_taylor << log10(wzgledna)<<" \n" ;
+        WYNIK << "\n";
+        wykres << "\n";
+        }
+
+    cout<<DBL_EPSILON;
+    PLIK.close();
+	WYNIK.close();
+	wykres.close();
+	wykres_taylor.close();
 
     return 0;
 }
+
