@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1587314195 source:d:\code blocks\codeblocks\metody_lab\lab7\main.cpp
+	<iostream>
+	<iomanip>
+	<math.h>
+
+1587219462 d:\code blocks\codeblocks\metody_lab\lab7\dynamiczne_struktury.hpp
+	<iostream>
+	<iomanip>
+	<sstream>
+	<cmath>
+	<fstream>
+

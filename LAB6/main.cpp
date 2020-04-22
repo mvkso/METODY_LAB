@@ -11,7 +11,7 @@ Wektor(const int rozmiar = 6){
 	if(rozmiar > 0)
 		this->rozmiar = rozmiar;
 	else{
-		cout << "B³êdny wymiar wektora!" << endl;
+		cout << "Blad wymiaru" << endl;
 		exit(-1);
 	}
 	this->tablica = new double[this->rozmiar];
@@ -122,7 +122,7 @@ void operacja_x(Wektor& x, Wektor& b, Wektor& U, Wektor& D, int rozmiar){
 		x(i) = (b(i) - U(i) * x(i + 1)) / D(i);
 }
 
-void algorytmThomasa(Wektor& L, Wektor& D, Wektor& U, Wektor& b, int rozmiar){
+void algThomas(Wektor& L, Wektor& D, Wektor& U, Wektor& b, int rozmiar){
 	cout << "Algorytm Thomasa" << endl;
 	Wektor x(rozmiar);
 	x.wyzeruj();
@@ -131,8 +131,8 @@ void algorytmThomasa(Wektor& L, Wektor& D, Wektor& U, Wektor& b, int rozmiar){
 	operacja_r(L, D, b, rozmiar);
 	operacja_x(x, b, U, D, rozmiar);
 
-	cout << "Wektor Rozwi¹zañ" << endl;
-	x.wyswietl();
+	cout << "wektor rozwiazan" << endl;
+	x.show();
 }
 
 
@@ -142,61 +142,30 @@ int main()
 
    const int rozmiar = 6;
 	Macierz_kwadratowa macierz = Macierz_kwadratowa(rozmiar);
-	Wektor wektorWyrazowWolnych = Wektor(rozmiar);
+	Wektor wektor_w_w = Wektor(rozmiar);
 
-	double b[rozmiar] = {
-		31.0,
-		165.0 / 4.0,
-		917.0 / 30.0,
-		851.0 / 28.0,
-		3637.0 / 90.0,
-		332.0 / 11.0
-	};
+	double b[rozmiar] = {31.0,165.0 / 4.0,917.0 / 30.0,851.0 / 28.0,3637.0 / 90.0,332.0 / 11.0};
+    double wektorD[rozmiar] = {10.0,20.0,30.0,30.0,20.0,10.0};
+	double wektorU[rozmiar] = {1.0/2.0,1.0/4.0,1.0/6.0,1.0/8.0,1.0/10.0,0.0 };
+    double wektorL[rozmiar] = {0.0,1.0/3.0,1.0/5.0,1.0/7.0,1.0/9.0,1.0/11.0};
 
-	double wektorL[rozmiar] = {
-		0.0,
-		3.0 / 4.0,
-		7.0 / 8.0,
-		11.0 / 12.0,
-		15.0 / 16.0,
-		19.0 / 20.0
-	};
-
-	double wektorD[rozmiar] = {
-		30.0,
-		20.0,
-		10.0,
-		10.0,
-		20.0,
-		30.0
-	};
-
-	double wektorU[rozmiar] = {
-		2.0 / 3.0,
-		5.0 / 6.0,
-		9.0 / 10.0,
-		13.0 / 14.0,
-		17.0 / 18.0,
-		0.0
-	};
-
-	wektorWyrazowWolnych.wypelnijZadaniem(b);
+	wektor_w_w.wypelnij(b);
 	cout << "Wektor wolnych wyrazow" << endl;
-	wektorWyrazowWolnych.wyswietl();
+	wektor_w_w.show();
 
-	macierz.zwrocL()->wypelnijZadaniem(wektorL);
+	macierz.zwrocL()->wypelnij(wektorL);
 	cout << "Wektor L" << endl;
-	macierz.zwrocL()->wyswietl();
+	macierz.zwrocL()->show();
 
-	macierz.zwrocD()->wypelnijZadaniem(wektorD);
+	macierz.zwrocD()->wypelnij(wektorD);
 	cout << "Wektor D" << endl;
-	macierz.zwrocD()->wyswietl();
+	macierz.zwrocD()->show();
 
-	macierz.zwrocU()->wypelnijZadaniem(wektorU);
+	macierz.zwrocU()->wypelnij(wektorU);
 	cout << "Wektor U" << endl;
-	macierz.zwrocU()->wyswietl();
+	macierz.zwrocU()->show();
 
-	algorytmThomasa(*(macierz.zwrocL()), *(macierz.zwrocD()), *(macierz.zwrocU()), wektorWyrazowWolnych, rozmiar);
+	algThomas(*(macierz.zwrocL()), *(macierz.zwrocD()), *(macierz.zwrocU()),wektor_w_w, rozmiar);
 
     return 0;
 }

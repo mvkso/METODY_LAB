@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1586177253 source:d:\code blocks\codeblocks\metody_lab\lab5\main.cpp
+	<iostream>
+	<iomanip>
+	<cmath>
+
