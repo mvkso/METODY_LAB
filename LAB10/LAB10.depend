@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1589124345 source:d:\code blocks\codeblocks\metody_lab\lab10\main.cpp
+	<iostream>
+	<cmath>
+	<iomanip>
+	<fstream>
+

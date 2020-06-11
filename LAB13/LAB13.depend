@@ -1,0 +1,30 @@
+# depslib dependency file v1.0
+1590998696 source:d:\code blocks\codeblocks\metody_lab\lab13\carlef.cpp
+	"math.h"
+	"iostream"
+	"carlef.h"
+
+1590998838 d:\code blocks\codeblocks\metody_lab\lab13\carlef.h
+
+1591000400 source:d:\code blocks\codeblocks\metody_lab\lab13\main.cpp
+	<iostream>
+	<math.h>
+	<iomanip>
+	<fstream>
+	<cmath>
+	"calerf.h"
+	"calerf.cpp"
+
+1590999249 d:\code blocks\codeblocks\metody_lab\lab13\calerf.h
+
+1591000491 d:\code blocks\codeblocks\metody_lab\lab13\calerf.cpp
+	"math.h"
+	"iostream"
+	"cmath"
+
+1591000496 source:d:\code blocks\codeblocks\metody_lab\lab13\calerf.cpp
+	"math.h"
+	"iostream"
+	"cmath"
+	"calerf.h"
+
