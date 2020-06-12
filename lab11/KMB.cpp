@@ -131,6 +131,42 @@ int main()
 	fs2.close();
     //usun_macierz( U, N );
 
+    //Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen.
+        //zmieniam ilosc wezlow
+
+        fs2 << setprecision(15);
+        fs2.open("maxblad_KMB.txt", fstream::out);
+        fs2<<setw(15)<<left<<"log10(h)"<<'\t'<<setw(15)<<left<<"log10(blad)"<<endl;
+        for (int i = 100; i > 0; i = i - 5)
+            {
+        int M2=i;
+        double h2=fabs(a/((double)M2-1.0));
+
+        double *h_vector=nowy_wektor(M2);
+        fill_h(h_vector,h2,M2);
+
+        double **ANAL2 = nowa_macierz( N, M2 );
+        analityczne( ANAL2, N, M2, dt_levels, h_vector, dt, h2 );
+        double **U2=nowa_macierz(N,M2);
+
+        klas_met_bezposred(U2,N,M2,dt_levels, h_vector,dt,h2,lambda);
+        double **BLAD_max = nowa_macierz(N,M2);
+
+        blad(BLAD_max, ANAL2, U2, N, M2);
+        double blad_wykresy=maxblad1(BLAD_max[N-1],N,M2);
+
+        fs2 << setw(15) << left << log10(h2) <<'\t'<< setw(15) << left << log10(blad_wykresy) << endl;
+
+
+        delete_vector(h_vector);
+		delete_matrix( U2, N);
+		delete_matrix(BLAD_max, N);
+		delete_matrix( ANAL2, N);
+
+            }
+		fs2.close();
+		cout<<"Zapisano: maxblad_KMB.txt"<<endl;
+
 
     delete_matrix(KMB, N);
     delete_matrix(ANAL, N);

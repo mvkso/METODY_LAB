@@ -46,7 +46,6 @@ int main()
     //double blad_wykresy=0.0;
     double last_blad;
     double last_h;
-    double h2;
     cout.setf( ios::fixed, ios::floatfield );
     cout.precision(1);
 
@@ -139,54 +138,52 @@ int main()
 		fs2 <<  '\t' << setw(25) << left << U[100][i] << setw(25) << left << ANAL[100][i] << endl;
 	}
 	cout<<"Zapisano: met_lassonenwyn_thomas.txt"<<endl;
-	fs2.close();
-    usun_macierz( U, N );
-	//Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen. Uruchamiam algorytm
-	//zmienajaæ iloœæ wez³ów na osi x
-    /*
-    h2=0.1;
-    blad_wykresy=0.0;
-    double dt2;
+        fs2.close();
 
-        //Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen. Uruchamiam algorytm
-	//zmienajaæ iloœæ wez³ów na osi x
+        double h2=0.1;
 
-	fs2 << setprecision(15);
-	fs2.open("blad_lassonen_thomas.txt", fstream::out);
-	for (int i = 100; i > 0; i = i - 5) {
-		int N1 = 400;
-		int M1 = i;
-		last_blad = blad_wykresy;
-		last_h = h2;
-		h2 = fabs((-a) / ((double)M1 - 1.0 ));
-		double *h_vector = nowy_wektor( M1 );
-		fill_h(h_vector,h2,M1);
-		dt2=(lambda*(h2*h2)/D);
-		double *dt_vector = nowy_wektor( N1 );
-		fill_dt(dt_vector,dt2,M1);
-		double **U=nowa_macierz(N1,M1);
-		for(int i=0; i<N1; i++)    //warunek brzegowy Xm
-        U[i][0] = 1.;
-     for(int i=0; i<N1; i++)    //warunek brzegowy X0
-        U[i][M1-1]=0.;
-     for(int i=0; i<M1; i++)  //warunek poczatkowy  U(x,0)= (1 dla x<0) (1 dla x>=0)
-        if(h_vector[i]<0.) U[0][i]=1.;
-                    else U[0][i]=0.;
+        //Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen.
+        //zmieniam ilosc wezlow
 
-		LaasonenThomas(U,N1,M1,dt_levels,h_vector,dt,h2,lambda);
+        fs2 << setprecision(15);
+        fs2.open("maxblad_lassonen_thomas.txt", fstream::out);
+        fs2<<setw(15)<<left<<"log10(h)"<<'\t'<<setw(15)<<left<<"log10(blad)"<<endl;
+        for (int i = 100; i > 0; i = i - 5)
+            {
+        int M2=i;
+        h2=fabs(a/((double)M2-1.0));
 
-		double blad_wykresy= maxblad(U[N1-1], N1, M1,h2,(N1-1),h_vector,dt_vector);
-		cout<<"h2= "<<h2<<" blad_wykresy = "<<blad_wykresy<<endl;
-		fs2 << setw(15) << left << log10(h2) <<'\t'<< setw(15) << left << log10(blad_wykresy) << endl;
-        cout<<"h2 logarytm= "<<log10(h2)<<" blad_wykresy logarytm= "<<log10(blad_wykresy)<<endl;
-		usun_macierz( U, N1 );
-		usun_wektor(h_vector);
-		usun_wektor(dt_vector);
+        double *h_vector=nowy_wektor(M2);
+        fill_h(h_vector,h2,M2);
 
-	}
-	cout<<"Zapisano: blad_lassonen_thomas.txt"<<endl;
-	fs2.close();
-    */
+        double **ANAL2 = nowa_macierz( N, M2 );
+        analityczne( ANAL2, N, M2, dt_levels, h_vector, dt, h2 );
+        double **U2=nowa_macierz(N,M2);
+
+        LaasonenThomas(U2,N,M2,dt_levels, h_vector,dt,h2,lambda);
+        double **BLAD_max = nowa_macierz(N,M2);
+
+        blad(BLAD_max, ANAL2, U2, N, M2,"maxblad_laasonen_Thomas.txt");
+        double blad_wykresy=maxblad1(BLAD_max[N-1],N,M2);
+
+        fs2 << setw(15) << left << log10(h2) <<'\t'<< setw(15) << left << log10(blad_wykresy) << endl;
+
+
+        usun_wektor(h_vector);
+		usun_macierz( U2, N);
+		usun_macierz( BLAD_max, N);
+		usun_macierz( ANAL2, N);
+
+            }
+		fs2.close();
+
+
+
+
+
+	cout<<"Zapisano: maxblad_laasonen_thomas.txt"<<endl;
+
+
 
 	/**Laasonen - LU */
 
@@ -232,57 +229,43 @@ int main()
 	}
 	cout<<"Zapisano: met_lassonenwyn_LU.txt"<<endl;
 	fs2.close();
-    //usun_macierz( A, N );
 
-	//Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen. Uruchamiam algorytm
-	//zmienajaæ iloœæ wez³ów na osi x
+/**
+    //Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen.
+    //zmieniam ilosc wezlow
 
-   // h2=0.1;
-    //blad_wykresy=0.0;
-        //Obliczanie maksymalnego bezwzglêdnego b³êdu dla czasu tmax w zale¿noœci od kroku h dla metody Lassonen. Uruchamiam algorytm
-	//zmienajaæ iloœæ wez³ów na osi x
-	/*
-	fs2 << setprecision(15);
-	fs2.open("blad_lassonen_LU.txt", fstream::out);
-	for (int i = 100; i > 0; i = i - 5) {
-		int N1 = 400;
-		int M1 = i;
-		last_blad = blad_wykresy;
-		last_h = h2;
-		h2 = (- a) / ((double)M1 - 1.0 );
-		double *h_vector = nowy_wektor( N1 );
-		fill_h(h_vector,h2,M1);
-		double **A=nowa_macierz(N1,M1);
-		for(int i=0; i<N1; i++)    //warunek brzegowy Xm
-     U[i][0] = 1.;
-     for(int i=0; i<N1; i++)    //warunek brzegowy X0
-     U[i][M1-1]=0.;
-     for(int i=0; i<M1; i++)  //warunek poczatkowy  U(x,0)= (1 dla x<0) (1 dla x>=0)
-        if(h_vector[i]<0.) A[0][i]=1.;
-                    else A[0][i]=0.;
+        fs2 << setprecision(15);
+        fs2.open("maxblad_lassonen_LU.txt", fstream::out);
+        fs2<<setw(15)<<left<<"log10(h)"<<'\t'<<setw(15)<<left<<"log10(blad)"<<endl;
+        for (int i = 100; i > 0; i = i - 5)
+            {
+        int M2=i;
+        h2=fabs(a/((double)M2-1.0));
 
-		LaasonenLU(A,N1,M1,dt_levels,h_vector,dt,h,lambda);
+        double *h_vector=nowy_wektor(M2);
+        fill_h(h_vector,h2,M2);
 
-		blad_wykresy = maxblad1(A[N1-1], N1, M1);
-		fs2 << setw(15) << left << log10(h2) <<'\t'<< setw(15) << left << log10(blad_wykresy) << endl;
+        double **ANAL2 = nowa_macierz( N, M2 );
+        analityczne( ANAL2, N, M2, dt_levels, h_vector, dt, h2 );
+        double **U2=nowa_macierz(N,M2);
+        LaasonenLU(U2,N,M2,dt_levels,h_vector,dt,h2,lambda);
+        double **BLAD_max = nowa_macierz(N,M2);
+        blad(BLAD_max, ANAL2, U2, N, M2,"maxblad_laasonen_LU.txt");
+        double blad_wykresy=maxblad1(BLAD_max[N-1],N,M2);
 
-		usun_macierz( A, N1 );
-		usun_wektor(h_vector);
-
-	}
-
-	cout<<"Zapisano: blad_lassonen_LU.txt"<<endl;
-	fs2.close();
-    */
+        fs2 << setw(15) << left << log10(h2) <<'\t'<< setw(15) << left << log10(blad_wykresy) << endl;
 
 
+        usun_wektor(h_vector);
+		usun_macierz( U2, N);
+		usun_macierz( BLAD_max, N);
+		usun_macierz( ANAL2, N);
+
+            }
+		fs2.close();
 
 
-
-
-
-
-
+*/
 
 
 
@@ -407,7 +390,7 @@ double analityczne(double **ANAL, int N, int M, double *dt_levels, double *h_lev
             for( int j=1; j<M; j++)
                  ANAL[i][j]=0.5*erfc((h_levels[j])/(2*sqrt(D*dt_levels[i])));
        }
-       zapisz_plik("an_laasonen.txt", ANAL, N, M);
+       //zapisz_plik("an_laasonen.txt", ANAL, N, M);
 }
 
 void Thomas( double *l, double *d, double *u, double *b, double *x, int n )  // l,d,u,b - wektory danych. x - wektor wynikowy , n - dlugosc wektorow
